@@ -21,13 +21,13 @@ namespace ProjectAuto
     /// </summary>
     public partial class MainPage : Page
     {
-        AutoEntities context = new AutoEntities(); 
+        AutoEntities context = new AutoEntities();
         public MainPage()
         {
             InitializeComponent();
             // List.ItemsSource = context.Product.ToList();
             var manufacturerlist = context.Manufacturer.ToList();
-            manufacturerlist.Insert(0,new Manufacturer {  Name = "Все элементы" });
+            manufacturerlist.Insert(0, new Manufacturer { Name = "Все элементы" });
             cmbManufactorer.ItemsSource = manufacturerlist;
             Update();
         }
@@ -43,25 +43,26 @@ namespace ProjectAuto
         }
         void Update()
         {
-            
-                List<Product> currentList = context.Product.ToList();
-           
-                if (cmbManufactorer.SelectedIndex > 0)
-                {
-                    currentList =
-                        context.Product.ToList().Where(x => x.ManufacturerID ==
-                        (cmbManufactorer.SelectedItem as Manufacturer).ID).ToList();
-                }
-                currentList = currentList.Where(x => x.Title.ToLower().Contains(tbSearch.Text.ToLower())).ToList();
-            try { 
-            currentList = currentList.Where(x => x.Description.Contains(tbSearch.Text)).ToList();
+
+            List<Product> currentList = context.Product.ToList();
+
+            if (cmbManufactorer.SelectedIndex > 0)
+            {
+                currentList =
+                    context.Product.ToList().Where(x => x.ManufacturerID ==
+                    (cmbManufactorer.SelectedItem as Manufacturer).ID).ToList();
+            }
+            currentList = currentList.Where(x => x.Title.ToLower().Contains(tbSearch.Text.ToLower())).ToList();
+            try
+            {
+                currentList = currentList.Where(x => x.Description.Contains(tbSearch.Text)).ToList();
             }
             catch { }
             rb1.IsChecked = false;
             rb2.IsChecked = false;
             tbCount.Text = $"Выведено: {currentList.Count()} из { context.Product.ToList().Count()}";
             List.ItemsSource = currentList;
-            }
+        }
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
